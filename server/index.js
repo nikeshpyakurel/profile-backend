@@ -10,7 +10,10 @@ import path from "path";
 import { fileURLToPath } from "url";
 import authRoutes from "./routes/auth"
 import userRoutes from "./routes/users"
-import { register } from "./controllers/auth"
+import postRoutes from "./routes/posts"
+import { register } from "./controllers/auth";
+import { createPost } from "./controllers/post"
+import { verifyToken } from "./middleware/auth";
 
 
 
@@ -42,12 +45,14 @@ const storage = multer.diskStorage({
 const upload = multer({ storage })
 
 
-
+// Routes with file upload
 app.post("/auth/register", upload.single("picture"), register);
+app.post("/posts", verifyToken, upload.single("picture"), createPost);
 
 // routes
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
+app.use("/posts", postRoutes)
 
 // DB Setup
 
