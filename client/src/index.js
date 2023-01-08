@@ -5,21 +5,32 @@ import App from './App';
 import authReducer from "./state";
 import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
-import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from "redux-persist";
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from "redux-persist";
 import storage from 'redux-persist/lib/storage';
 import { PersistGate } from 'redux-persist/integration/react';
+
+
 const presistConfig = { key: "root", storage, version: 1 };
-const presistedReducer = persistReducer(presistConfig, authReducer);
+const persistedReducer = persistReducer(presistConfig, authReducer);
 const store = configureStore({
-  reducer: presistedReducer,
-  middleware: (getDefaultMiddleware) => {
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
         ignoreActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
       }
     })
-  }
-})
+
+});
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
@@ -30,5 +41,3 @@ root.render(
     </Provider>
   </React.StrictMode>
 );
-
-
